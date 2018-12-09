@@ -4,6 +4,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
+/**
+ * @author JHW
+ *
+ */
 public class SemaphoreDemo1 {
 	
 	private static final int permits = 3;
