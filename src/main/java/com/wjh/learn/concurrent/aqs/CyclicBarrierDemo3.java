@@ -4,12 +4,14 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class CyclicBarrierDemo1 {
+public class CyclicBarrierDemo3 {
 	
 	private static final int THREAD_NUM = 10;
 	private static final int parties = 5;
 	
-	private static CyclicBarrier barrier = new CyclicBarrier(parties);
+	private static CyclicBarrier barrier = new CyclicBarrier(parties, ()-> {
+		System.out.println("当CyclicBarrier中的线程数到达指定数量时候，优先执行这个里面的Runnable。。。");
+	});
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -27,34 +29,10 @@ public class CyclicBarrierDemo1 {
 		}
 		executor.shutdown();
 	}
-	/*
-	 *  pool-1-thread-1 is ready...1
-		pool-1-thread-2 is ready...2
-		pool-1-thread-3 is ready...3
-		pool-1-thread-4 is ready...4
-		pool-1-thread-5 is ready...5
-		pool-1-thread-1 is continue...1
-		pool-1-thread-2 is continue...2
-		pool-1-thread-3 is continue...3
-		pool-1-thread-5 is continue...5
-		pool-1-thread-4 is continue...4
-		pool-1-thread-6 is ready...6
-		pool-1-thread-4 is ready...7
-		pool-1-thread-1 is ready...8
-		pool-1-thread-3 is ready...9
-		pool-1-thread-5 is ready...10
-		pool-1-thread-5 is continue...10
-		pool-1-thread-4 is continue...7
-		pool-1-thread-3 is continue...9
-		pool-1-thread-1 is continue...8
-		pool-1-thread-6 is continue...6
-	 */
+	
 	private static void test(int num) throws Exception {
 		Thread.sleep(1000);
 		System.out.println(Thread.currentThread().getName()+" is ready..."+ num);
-		/*
-		 * 当CyclicBarrier中的线程到达指定数量时，才开始执行await()方法后面的代码
-		 */
 		barrier.await();
 		System.out.println(Thread.currentThread().getName()+" is continue..."+ num);
 	}
