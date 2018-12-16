@@ -13,6 +13,10 @@ public class MyselfAqs implements Lock {
 	
 	private Helper helper;
 	
+	public MyselfAqs() {
+		helper = new Helper();
+	}
+	
 	private class Helper extends AbstractQueuedSynchronizer {
 		
 		private static final long serialVersionUID = 20181212200910L;
