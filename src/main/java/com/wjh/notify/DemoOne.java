@@ -1,28 +1,20 @@
-package notify;
-
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+package com.wjh.notify;
 
 /**
- * condition
- * @see DemoOne
+ * wait()方法需要放在同步代码块中，其调用者为同步代码块的锁对象。
+ * @see DemoTwo
  * @author JHW
  *
  */
-public class DemoTwo {
+public class DemoOne {
 
 	private int signal = 1;
-	private Lock lock = new ReentrantLock();
-	private Condition a = lock.newCondition();
-	private Condition b = lock.newCondition();
-	private Condition c = lock.newCondition();
 	
 	public static void main(String[] args) {
-		DemoTwo two = new DemoTwo();
-		A1 a = new A1(two);
-		B1 b = new B1(two);
-		C1 c = new C1(two);
+		DemoOne one = new DemoOne();
+		A a = new A(one);
+		B b = new B(one);
+		C c = new C(one);
 		
 		Thread t1 = new Thread(a);
 		Thread t2 = new Thread(b);
@@ -33,56 +25,53 @@ public class DemoTwo {
 		t3.start();
 	}
 	
-	public void a() {
-		lock.lock();
+	public synchronized void a() {
 		while (signal != 1) {
 			try {
-				a.await();
+				/**
+				 * 调用对象是当前锁对象，也就是当前调用者
+				 */
+				wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		System.out.println("a");
 		signal++;
-		b.signal();
-		lock.unlock();
+		notifyAll();
 	}
 	
-	public void b() {
-		lock.lock();
+	public synchronized void b() {
 		while (signal != 2) {
 			try {
-				b.await();
+				wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		System.out.println("b");
 		signal++;
-		c.signal();
-		lock.unlock();
+		notifyAll();
 	}
 	
-	public  void c() {
-		lock.lock();
+	public synchronized void c() {
 		while (signal != 3) {
 			try {
-				c.await();
+				wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		System.out.println("c");
 		signal = 1;
-		a.signal();
-		lock.unlock();
+		notifyAll();
 	}
 }
 
-class A1 implements Runnable{
-	private DemoTwo one;
+class A implements Runnable{
+	private DemoOne one;
 	
-	public A1(DemoTwo one) {
+	public A(DemoOne one) {
 		this.one = one;
 	}
 
@@ -99,10 +88,10 @@ class A1 implements Runnable{
 	}
 }
 
-class B1 implements Runnable{
-	private DemoTwo one;
+class B implements Runnable{
+	private DemoOne one;
 	
-	public B1(DemoTwo one) {
+	public B(DemoOne one) {
 		this.one = one;
 	}
 
@@ -119,10 +108,10 @@ class B1 implements Runnable{
 	}
 }
 
-class C1 implements Runnable{
-	private DemoTwo one;
+class C implements Runnable{
+	private DemoOne one;
 	
-	public C1(DemoTwo one) {
+	public C(DemoOne one) {
 		this.one = one;
 	}
 
