@@ -1,7 +1,7 @@
 package notify;
 
 /**
- * wait()方法需要放在同步代码块中，其调用者为同步代码块的锁对象
+ * wait()方法需要放在同步代码块中，其调用者为同步代码块的锁对象。
  * @see DemoTwo
  * @author JHW
  *
