@@ -4,6 +4,13 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * CyclicBarrier中等待的线程数达到了CyclicBarrier指定的数量时，
+ * 就会执行构造函数中的第二个参数中的线程方法，之后再去执行等待线程await()
+ * 方法后面的内容。
+ * @author JHW
+ *
+ */
 public class CyclicBarrierDemo3 {
 	
 	private static final int THREAD_NUM = 10;
