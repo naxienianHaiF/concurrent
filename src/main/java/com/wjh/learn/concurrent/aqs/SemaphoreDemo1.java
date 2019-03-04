@@ -24,11 +24,18 @@ public class SemaphoreDemo1 {
 		for (int i = 0; i < ThreadCount; i++) {
 			final int threadNum = i;
 			try {
-				//获取一个许可
-				semaphore.acquire();
-				test(threadNum);
-				//释放一个许可
-				semaphore.release();
+				service.submit(() -> {
+					try {
+						//获取一个许可
+						semaphore.acquire();
+						test(threadNum);
+					} catch (Exception e) {
+						e.printStackTrace();
+					} finally {
+						//释放一个许可
+						semaphore.release();
+					}
+				});
 			} catch (Exception e) {
 				System.out.println("exception..."+ e.getMessage());
 			}
